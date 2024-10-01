@@ -2,11 +2,13 @@ Apa Itu Dart & Flutter?
 Dart dan Flutter adalah dua teknologi yang bekerja bersama dalam pengembangan aplikasi multiplatform. Berikut penjelasannya:
 
 1. Dart
+   
 Dart adalah bahasa pemrograman yang dikembangkan oleh Google. Bahasa ini bersifat statically typed dan object-oriented. Dart dirancang agar mudah dipelajari dan mendukung pengembangan aplikasi yang dapat berjalan di berbagai platform, baik web, desktop, maupun mobile. Kelebihan utama dari Dart adalah:
 
 Kompilasi cepat: Dart dapat dikompilasi baik secara Just-in-Time (JIT) maupun Ahead-of-Time (AOT), memungkinkan waktu build dan eksekusi yang cepat.
 Dukungan untuk hot-reload: Mengubah kode dan melihat perubahan langsung tanpa harus mengulang build.
 Sintaksis yang sederhana dan mudah dipahami.
+
 2. Flutter
 Flutter adalah framework open-source yang juga dikembangkan oleh Google. Flutter memungkinkan pengembangan aplikasi multiplatform (Android, iOS, web, desktop) dengan satu basis kode (single codebase). Flutter menggunakan Dart sebagai bahasa pemrogramannya. Beberapa kelebihan Flutter antara lain:
 
