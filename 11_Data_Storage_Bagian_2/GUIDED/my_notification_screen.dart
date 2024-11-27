@@ -33,58 +33,15 @@ class _MyNotificationScreenState extends State<MyNotificationScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeFirebase();
-    _setupFirebaseMessaging();
-  }
-
-  Future<void> _initializeFirebase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-
-    // Inisialisasi kanal notifikasi Android
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-
-    // Pengaturan tampilan notifikasi foreground
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    // Mendapatkan token FCM
-    getToken();
-  }
-
-  void _setupFirebaseMessaging() {
-    // Mendengarkan pesan saat aplikasi aktif
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              color: Colors.blue,
-              icon: "@mipmap/ic_launcher",
-            ),
-          ),
-        );
-      }
-    });
-
-    // Menangani aksi notifikasi yang dibuka
+// Membuat pengaturan inisialisasi notifikasi untuk Android
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    FlutterLocalNotificationsPlugin().initialize(initializationSettings);
+// Mendengarkan pesan saat aplikasi aktif
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("Notifikasi diklik: ${message.notification?.title}");
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
 
@@ -92,22 +49,30 @@ class _MyNotificationScreenState extends State<MyNotificationScreen> {
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: Text(notification.title ?? ""),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(notification.body ?? "")],
+            title: Text(notification.title ?? "No Title"),
+            content: Text(notification.body ?? "No Body"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
               ),
-            ),
+            ],
           ),
         );
       }
     });
+
+// Memanggil metode untuk mengambil token FCM perangkat
+    getToken();
   }
 
+// Metode untuk mendapatkan token FCM
   void getToken() async {
-    token = await FirebaseMessaging.instance.getToken();
-    print('FCM Token: $token');
+    token = await FirebaseMessaging.instance
+        .getToken(); // Mendapatkan token FCM perangkat
+    print('FCM Token: $token'); // Menampilkan token di log
   }
 
   @override
